@@ -49,7 +49,7 @@
 				010A993E1D2682C500AE15E8 /* NavigationDelegate.swift */,
 				010A99401D26845E00AE15E8 /* TransitionAnimator.swift */,
 			);
-			name = transition;
+			path = transition;
 			sourceTree = "<group>";
 		};
 		014230281D25692A00A173E3 = {
@@ -113,7 +113,7 @@
 				0142304B1D256AE500A173E3 /* MasterViewController.swift */,
 				0142304D1D256AF200A173E3 /* DetailViewController.swift */,
 			);
-			name = controllers;
+			path = controllers;
 			sourceTree = "<group>";
 		};
 		014230531D256F3600A173E3 /* model */ = {
@@ -121,7 +121,7 @@
 			children = (
 				014230541D256F5700A173E3 /* ColorCollection.swift */,
 			);
-			name = model;
+			path = model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
