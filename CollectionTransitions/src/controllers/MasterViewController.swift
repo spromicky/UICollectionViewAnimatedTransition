@@ -17,8 +17,11 @@ class MasterCell: UICollectionViewCell {
     func update(colorCollection collection: ColorCollection) {
         titleLabel.text = collection.name
         
-        for (index, color) in collection.colors.enumerate() {
-            colorViews[index].backgroundColor = color
+        colorViews.forEach { $0.backgroundColor = .clearColor() }
+        
+        for (index, colorView) in colorViews.enumerate() {
+            guard index < collection.colors.count else { continue }
+            colorView.backgroundColor = collection.colors[index]
         }
     }
 }

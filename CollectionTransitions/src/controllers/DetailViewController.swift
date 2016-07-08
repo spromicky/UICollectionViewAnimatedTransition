@@ -31,8 +31,9 @@ class AnimateLayout: UICollectionViewFlowLayout {
         guard let attributes = super.layoutAttributesForElementsInRect(rect) else { return nil }
         
         if toStartPosition {
-            for (index, frame) in frames.enumerate() {
-                attributes[index].frame = frame
+            for (index, attribute) in attributes.enumerate() {
+                attribute.frame = frames[index % 4]
+                attribute.zIndex = attributes.count - index - 1
             }
         }
         

@@ -47,7 +47,8 @@ struct ColorCollection {
         return slice.map { _ in
             iteration += 1
             
-            let colors = (0..<4).map { _ in colorArray[Int(arc4random() % 23)] }
+            let colorAmount = 1 + arc4random() % 26
+            let colors = (0..<colorAmount).map { _ in colorArray[Int(arc4random() % 23)] }
             
             return ColorCollection(name: "#\(iteration)", colors: colors)
         }
