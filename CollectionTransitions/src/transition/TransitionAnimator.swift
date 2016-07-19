@@ -19,7 +19,14 @@ class TransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 0.32
+        let defaultTime = 0.32
+        guard reverse else { return defaultTime }
+        guard let transitionContext = transitionContext else { return defaultTime }
+        guard let fromVC = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) as? DetailViewController else { return defaultTime }
+        guard let collectionView = fromVC.collectionView else { return defaultTime }
+        
+        let containFirstItem = collectionView.visibleCells().lazy.map { collectionView.indexPathForCell($0) }.contains { $0?.item == 0 }
+        return containFirstItem ? defaultTime : 0.82
     }
     
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
@@ -47,17 +54,20 @@ class TransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         
         detailVC.collectionView?.performBatchUpdates({
             detailVC.collectionView?.collectionViewLayout.invalidateLayout()
-        }, completion: { _ in
-            cell.colorViews.forEach { $0.alpha = 1 }
-        })
+        }, completion:nil)
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(transitionDuration(transitionContext) * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-            fromVC.view.removeFromSuperview()
-            transitionContext.completeTransition(true)
-        }
-        
-        UIView.animateWithDuration(0.32) {
+        let invalidateTime = 0.32
+        UIView.animateWithDuration(invalidateTime, animations: {
             detailVC.collectionView?.backgroundColor = self.reverse ? .clearColor() : masterVC.collectionView?.backgroundColor
+        }) { _ in
+            cell.colorViews.forEach { $0.alpha = 1 }
+            UIView.animateWithDuration(self.transitionDuration(transitionContext) - invalidateTime, animations: {
+                guard self.reverse else { return }
+                fromVC.view.alpha = 0
+            }) { _ in
+                fromVC.view.removeFromSuperview()
+                transitionContext.completeTransition(true)
+            }
         }
     }
 }

@@ -30,14 +30,22 @@ class AnimateLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributes = super.layoutAttributesForElementsInRect(rect) else { return nil }
         
-        if toStartPosition {
-            for (index, attribute) in attributes.enumerate() {
-                attribute.frame = frames[index % 4]
-                attribute.zIndex = attributes.count - index - 1
-            }
+        let copiedAttributes = attributes.map { $0.copy() as! UICollectionViewLayoutAttributes }
+        let count = collectionView?.dataSource?.collectionView(collectionView!, numberOfItemsInSection: 0) ?? 0
+        let visibleFrame = CGRect(origin: (collectionView?.contentOffset)!, size: (collectionView?.frame.size)!)
+        
+        copiedAttributes.forEach { attribute in
+            attribute.zIndex = count - attribute.indexPath.item - 1
+            
+            guard toStartPosition else { return }
+            guard CGRectIntersectsRect(attribute.frame, visibleFrame) else { attribute.hidden = true; return }
+            
+            var newFrame = frames[attribute.indexPath.item % 4]
+            newFrame.origin.y += (collectionView?.contentOffset.y ?? 0) + (collectionView?.contentInset.top ?? 0)
+            attribute.frame = newFrame
         }
         
-        return attributes
+        return copiedAttributes
     }
 }
 
@@ -67,6 +75,7 @@ class DetailViewController: UICollectionViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
+        collectionView?.setContentOffset((collectionView?.contentOffset)!, animated: false)
         flowLayout.toStartPosition = true
     }
     

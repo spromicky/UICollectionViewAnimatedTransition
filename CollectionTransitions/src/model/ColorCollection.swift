@@ -15,7 +15,7 @@ struct ColorCollection {
     let name: String
     let colors: [UIColor]
     
-    static let sharedCollection = ColorCollection.generate(20)
+    static let sharedCollection = ColorCollection.generate(200)
     static private var iteration = 0
     static private let colorArray = [UIColor(red: 0.866667, green: 0.572549, blue: 0.372549, alpha: 1),
                                      UIColor(red: 0.868731, green: 0.575814, blue: 0.373674, alpha: 1),
@@ -47,7 +47,7 @@ struct ColorCollection {
         return slice.map { _ in
             iteration += 1
             
-            let colorAmount = 1 + arc4random() % 26
+            let colorAmount = 1 + arc4random() % 100
             let colors = (0..<colorAmount).map { _ in colorArray[Int(arc4random() % 23)] }
             
             return ColorCollection(name: "#\(iteration)", colors: colors)

@@ -10,6 +10,10 @@ There not used `useLayoutToLayoutNavigationTransitions` cause in this case you j
 
 So I make this behaviour by implementing usual `UIViewControllerAnimatedTransitioning` object and different start `UICollectionViewFlowLayout` for `DetailViewController`.  On the first call of `layoutAttributesForElementsInRect` we just return `attributes`, that make our `detail` cells same as components of `master` cell content. And in some point in `animateTransition(transitionContext: _)` make this layout `invalidate` or replace with another.
 
+## ToDo
+
+- Look up for rewrite behaviour from invalidation to two different layouts. And just do animate change between layouts.
+
 ## Requirements 
 
 - Swift 2.2
@@ -17,4 +21,3 @@ So I make this behaviour by implementing usual `UIViewControllerAnimatedTransiti
 ## License
 
 CollectionTransition is available under the MIT license. See the LICENSE file for more info.
-

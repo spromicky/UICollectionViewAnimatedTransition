@@ -38,7 +38,11 @@ class MasterViewController: UICollectionViewController {
         guard let detailVC = segue.destinationViewController as? DetailViewController else { return }
         
         let cell   = collectionView?.cellForItemAtIndexPath(selectedIndex) as! MasterCell
-        let frames = cell.colorViews.map { cell.convertRect($0.frame, toView: collectionView) }
+        let frames = cell.colorViews.map { colorView -> CGRect in
+            var colorViewFrame = cell.convertRect(colorView.frame, toView: view)
+            colorViewFrame.origin.y -= collectionView?.contentInset.top ?? 0
+            return colorViewFrame
+        }
         let layout = AnimateLayout(frames: frames)
         
         detailVC.flowLayout      = layout
